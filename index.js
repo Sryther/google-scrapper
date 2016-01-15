@@ -14,15 +14,21 @@ scrapper.search(options, function(err, links) {
     if (err) {
         console.error(JSON.stringify(err));
     }
+    // Sanitizes the links
     links = sanitizer(links);
+
     var i = 0;
+    // Loops through the links to identify the CMS
     links.forEach(function(link, key) {
         identifier.identify(link.url, function(err, cms) {
-            i++;
             if (err) {
                 console.error(JSON.stringify(err));
             }
+            i++;
+
             links[key].cms = cms;
+
+            // Once it's ended, call the last function to terminate the program
             if (i == links.length) {
                 return done(links); // Process ended
             }
@@ -32,6 +38,8 @@ scrapper.search(options, function(err, links) {
 
 var done = function(links) {
     console.log("Done!");
+
+    // Finally, saves the links into a json file
     writer(options.keywords.join('-'), links, function(err) {
         console.log(links);
         process.exit();

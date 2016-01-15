@@ -5,6 +5,12 @@
 * phantomjs
 * casperjs
 
+## Installation
+
+```
+npm install
+```
+
 ## How to
 
 ```
