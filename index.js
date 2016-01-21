@@ -9,7 +9,7 @@ var options = {
     cms: 'wordpress'
 };
 
-console.log("Wait.");
+console.log("\r\nPlease wait.\r\n");
 scrapper.search(options, function(err, links) {
     if (err) {
         console.error(JSON.stringify(err));
@@ -26,8 +26,7 @@ scrapper.search(options, function(err, links) {
             }
             i++;
 
-            links[key].cms = cms;
-
+            links[key].cms = cms || options.cms;
             // Once it's ended, call the last function to terminate the program
             if (i == links.length) {
                 return done(links); // Process ended
@@ -41,7 +40,9 @@ var done = function(links) {
 
     // Finally, saves the links into a json file
     writer(options.keywords.join('-'), links, function(err) {
-        console.log(links);
-        process.exit();
+        if (phantom) {
+            return phantom.exit(0);
+        }
+        process.exit(0);
     });
 };
