@@ -1,6 +1,5 @@
 var scrapper   = require('./lib/scrapper');
 var sanitizer  = require('./lib/sanitizer');
-var identifier = require('./lib/identifier');
 var writer     = require('./lib/writer');
 
 var options = {
@@ -15,24 +14,7 @@ scrapper.search(options, function(err, links) {
         console.error(JSON.stringify(err));
     }
     // Sanitizes the links
-    links = sanitizer(links);
-
-    var i = 0;
-    // Loops through the links to identify the CMS
-    links.forEach(function(link, key) {
-        identifier.identify(link.url, function(err, cms) {
-            if (err) {
-                console.error(JSON.stringify(err));
-            }
-            i++;
-
-            links[key].cms = cms || options.cms;
-            // Once it's ended, call the last function to terminate the program
-            if (i == links.length) {
-                return done(links); // Process ended
-            }
-        });
-    });
+    done(sanitizer(links));
 });
 
 var done = function(links) {
